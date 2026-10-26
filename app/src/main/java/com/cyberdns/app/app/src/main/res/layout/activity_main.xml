@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="#070913"
+    android:padding="24dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CYBER DNS"
+        android:textColor="#00F3FF"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:letterSpacing="0.05"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="کاهش پینگ و رفع تحریم بازی‌ها"
+        android:textColor="#8B9BB4"
+        android:textSize="14sp"
+        android:layout_marginBottom="40dp" />
+
+    <EditText
+        android:id="@+id/etDns1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="178.22.122.100"
+        android:background="#12182B"
+        android:textColor="#FFFFFF"
+        android:padding="14dp"
+        android:layout_marginBottom="12dp"
+        android:hint="DNS 1"
+        android:textColorHint="#4B5563" />
+
+    <EditText
+        android:id="@+id/etDns2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="185.51.200.2"
+        android:background="#12182B"
+        android:textColor="#FFFFFF"
+        android:padding="14dp"
+        android:layout_marginBottom="32dp"
+        android:hint="DNS 2"
+        android:textColorHint="#4B5563" />
+
+    <Button
+        android:id="@+id/btnToggle"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="اتصال دی‌ان‌اس"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:backgroundTint="#00F3FF" />
+
+</LinearLayout>
