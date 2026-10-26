@@ -45,20 +45,25 @@ class DnsVpnService : VpnService() {
     private fun startForegroundServiceNotification() {
         val channelId = "CyberDnsChannel"
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(channelId, "Cyber DNS Service", NotificationManager.IMPORTANCE_LOW)
+            val channel = NotificationChannel(
+                channelId,
+                "Cyber DNS Service",
+                NotificationManager.IMPORTANCE_LOW
+            )
             val manager = getSystemService(NotificationManager::class.java)
             manager?.createNotificationChannel(channel)
         }
 
         val notification = NotificationCompat.Builder(this, channelId)
             .setContentTitle("Cyber DNS فعال است")
-            .setContentText("ترافیک دی‌ان‌اس در حال عبور از سرورهای گیمینگ")
-            .setSmallIcon(android.R.drawable.stat_sys_warning)
+            .setContentText("ترافیک دی‌ان‌اس روی سرور گیمینگ تنظیم شد")
+            .setSmallIcon(android.R.drawable.ic_lock_lock)
             .build()
 
         startForeground(1, notification)
     }
 
+    @Suppress("DEPRECATION")
     private fun stopVpn() {
         try {
             vpnInterface?.close()
@@ -66,7 +71,11 @@ class DnsVpnService : VpnService() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        stopForeground(STOP_FOREGROUND_REMOVE)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            stopForeground(STOP_FOREGROUND_REMOVE)
+        } else {
+            stopForeground(true)
+        }
         stopSelf()
     }
 
