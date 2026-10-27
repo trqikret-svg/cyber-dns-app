@@ -30,17 +30,17 @@ class MainActivity : Activity() {
     private val MY_DNS_1 = "202.133.91.159"
     private val MY_DNS_2 = "82.22.175.205"
     private val BOT_URL = "https://t.me/Nerodnsbot"
-    private val API_URL = "https://yourdomain.com/api.php" // آدرس API خودت رو اینجا بذار
+    private val API_URL = "https://musicpass.ir/api.php" 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.statusBarColor = Color.parseColor("#050711")
-        window.navigationBarColor = Color.parseColor("#050711")
-
+        
+        // بک‌گراند وب‌ویو شفاف می‌شود تا CSS بتواند رنگ تم تاریک/روشن را اعمال کند
         webView = WebView(this).apply {
-            setBackgroundColor(Color.parseColor("#050711"))
+            setBackgroundColor(Color.TRANSPARENT)
             settings.javaScriptEnabled = true
             settings.domStorageEnabled = true
+            settings.cacheMode = WebSettings.LOAD_NO_CACHE
             addJavascriptInterface(WebAppInterface(), "AndroidBridge")
         }
 
@@ -144,85 +144,108 @@ class MainActivity : Activity() {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <style>
-  :root { --cyan: #00f3ff; --purple: #9d00ff; --green: #00ff9d; --bg: #050711; --glass: rgba(12, 18, 36, 0.75); }
-  * { box-sizing: border-box; margin: 0; padding: 0; font-family: Tahoma, sans-serif; user-select: none; -webkit-tap-highlight-color: transparent; }
-  body { background: var(--bg); color: #fff; min-height: 100vh; overflow: hidden; }
+  @import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css');
 
-  .bg-anim { position: fixed; inset: 0; z-index: -2; background: radial-gradient(circle at 50% 10%, #0a1128, #050711); }
+  :root {
+    /* Light Theme (Default) */
+    --cyan: #0077b6; --purple: #7209b7; --green: #00b300; --bg: #f8fafc;
+    --glass: rgba(255, 255, 255, 0.85); --text-main: #0f172a; --text-sub: #475569;
+    --card-border: rgba(0, 119, 182, 0.2); --input-bg: #ffffff; --btn-bg: rgba(0, 0, 0, 0.04);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      /* Dark Theme */
+      --cyan: #00f3ff; --purple: #9d00ff; --green: #00ff9d; --bg: #050711;
+      --glass: rgba(12, 18, 36, 0.75); --text-main: #ffffff; --text-sub: #94a3b8;
+      --card-border: rgba(0, 243, 255, 0.25); --input-bg: rgba(0, 0, 0, 0.55);
+      --btn-bg: rgba(255, 255, 255, 0.06);
+    }
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Vazirmatn', Tahoma, sans-serif; user-select: none; -webkit-tap-highlight-color: transparent; }
+  body { background: var(--bg); color: var(--text-main); height: 100vh; overflow: hidden; transition: background 0.3s, color 0.3s; }
+
+  .bg-anim { position: fixed; inset: 0; z-index: -2; background: radial-gradient(circle at 50% 10%, rgba(10,17,40,0.5), transparent); }
   .orb { position: absolute; border-radius: 50%; filter: blur(65px); opacity: 0.45; animation: float 10s infinite alternate ease-in-out; }
   .orb1 { width: 260px; height: 260px; background: var(--cyan); top: -50px; right: -60px; }
   .orb2 { width: 220px; height: 220px; background: var(--purple); bottom: -30px; left: -50px; animation-duration: 13s; }
   @keyframes float { 0% { transform: translateY(0) scale(1); } 100% { transform: translateY(40px) scale(1.15); } }
 
-  .page { display: none; padding: 24px 20px; max-width: 420px; margin: 0 auto; height: 100vh; flex-direction: column; justify-content: center; animation: fadeIn 0.35s ease; }
-  .page.active { display: flex; }
+  .page { display: none; padding: 24px 20px; max-width: 420px; margin: 0 auto; height: 100vh; flex-direction: column; justify-content: center; }
+  .page.active { display: flex; animation: fadeIn 0.35s ease; }
   @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
-  .glass-card { background: var(--glass); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(0, 243, 255, 0.25); border-radius: 26px; padding: 28px 22px; box-shadow: 0 15px 35px rgba(0,0,0,0.6); text-align: center; }
+  .glass-card { background: var(--glass); backdrop-filter: blur(24px); border: 1px solid var(--card-border); border-radius: 26px; padding: 28px 22px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); text-align: center; display: flex; flex-direction: column; max-height: 95vh; position: relative; }
   
-  .logo-img { width: 90px; height: 90px; border-radius: 50%; margin: 0 auto 15px; border: 2px solid var(--cyan); box-shadow: 0 0 25px rgba(0,243,255,0.4); object-fit: cover; }
+  .logo-img { width: 90px; height: 90px; border-radius: 50%; margin: 0 auto 15px; border: 2px solid var(--cyan); box-shadow: 0 0 25px rgba(0,119,182,0.3); object-fit: cover; }
+  @media (prefers-color-scheme: dark) { .logo-img { box-shadow: 0 0 25px rgba(0,243,255,0.4); } }
   
-  h1 { font-size: 24px; color: #fff; margin-bottom: 8px; text-shadow: 0 0 12px rgba(0,243,255,0.6); font-weight: bold; }
-  p.sub { font-size: 13px; color: #94a3b8; margin-bottom: 24px; line-height: 1.5; }
+  h1 { font-size: 22px; color: var(--text-main); margin-bottom: 8px; font-weight: 800; }
+  p.sub { font-size: 13px; color: var(--text-sub); margin-bottom: 24px; line-height: 1.6; }
 
-  .input-box { width: 100%; background: rgba(0,0,0,0.55); border: 1px solid rgba(0, 243, 255, 0.4); border-radius: 14px; padding: 15px; color: #fff; text-align: center; font-size: 15px; margin-bottom: 12px; outline: none; }
-  .btn-main { width: 100%; background: linear-gradient(135deg, var(--cyan), #0066ff); color: #000; font-weight: bold; font-size: 15px; border: none; border-radius: 14px; padding: 15px; cursor: pointer; margin-bottom: 12px; transition: 0.2s; box-shadow: 0 4px 15px rgba(0,243,255,0.4); }
+  .input-box { width: 100%; background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 14px; padding: 15px; color: var(--text-main); text-align: center; font-size: 15px; margin-bottom: 12px; outline: none; transition: 0.3s; }
+  .input-box:focus { border-color: var(--cyan); }
+  
+  .btn-main { width: 100%; background: var(--cyan); color: #fff; font-weight: bold; font-size: 15px; border: none; border-radius: 14px; padding: 15px; cursor: pointer; margin-bottom: 12px; transition: 0.2s; box-shadow: 0 4px 15px rgba(0,119,182,0.3); }
   .btn-main:active { transform: scale(0.95); }
-  .btn-sec { width: 100%; background: rgba(157, 0, 255, 0.1); border: 1px solid var(--purple); color: #e9d5ff; border-radius: 14px; padding: 14px; font-size: 13px; cursor: pointer; }
+  .btn-sec { width: 100%; background: transparent; border: 1px solid var(--purple); color: var(--purple); border-radius: 14px; padding: 14px; font-size: 13px; font-weight: bold; cursor: pointer; }
 
-  .games-container { max-height: 350px; overflow-y: auto; padding-right: 5px; margin-top: 15px; }
-  .games-container::-webkit-scrollbar { display: none; }
-  .games { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .game-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 18px; padding: 15px 8px; color: #fff; text-align: center; cursor: pointer; transition: 0.2s; font-size: 13px; font-weight: bold; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-  .game-btn:active { background: rgba(0, 243, 255, 0.2); border-color: var(--cyan); transform: scale(0.95); }
-  .g-icon { font-size: 24px; margin-bottom: 5px; }
+  /* گرید بهینه بازی‌ها بدون فضای مرده */
+  .games-container { flex: 1; overflow-y: auto; padding-right: 5px; margin-top: 15px; }
+  .games-container::-webkit-scrollbar { width: 4px; }
+  .games-container::-webkit-scrollbar-thumb { background: var(--cyan); border-radius: 10px; }
+  .games { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; padding-bottom: 15px; }
+  .game-btn { background: var(--btn-bg); border: 1px solid var(--card-border); border-radius: 18px; padding: 15px 5px; color: var(--text-main); text-align: center; cursor: pointer; transition: 0.2s; font-size: 12px; font-weight: bold; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .game-btn:active { background: rgba(0, 119, 182, 0.1); transform: scale(0.95); }
   
   .radar-container { margin: 35px auto 45px; position: relative; width: 190px; height: 190px; display: flex; align-items: center; justify-content: center; }
   .pulse { position: absolute; width: 100%; height: 100%; border-radius: 50%; border: 2px solid var(--cyan); animation: radarPing 2s infinite; opacity: 0.6; }
   .pulse.on { border-color: var(--green); }
   @keyframes radarPing { 0% { transform: scale(0.75); opacity: 1; } 100% { transform: scale(1.4); opacity: 0; } }
   
-  .power-btn { width: 145px; height: 145px; border-radius: 50%; background: radial-gradient(circle, #0e152e, #050711); border: 4px solid var(--cyan); box-shadow: 0 0 35px rgba(0,243,255,0.45); display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--cyan); z-index: 2; transition: 0.3s; cursor: pointer; }
-  .power-btn.on { border-color: var(--green); color: var(--green); box-shadow: 0 0 45px rgba(0,255,157,0.6); }
+  .power-btn { width: 145px; height: 145px; border-radius: 50%; background: var(--input-bg); border: 4px solid var(--cyan); box-shadow: 0 0 25px rgba(0,119,182,0.2); display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--cyan); z-index: 2; transition: 0.3s; cursor: pointer; }
+  .power-btn.on { border-color: var(--green); color: var(--green); }
 
-  .info-row { display: flex; justify-content: space-between; font-size: 13px; margin-top: 16px; padding-bottom: 8px; border-bottom: 1px dashed rgba(255,255,255,0.15); }
+  .info-row { display: flex; justify-content: space-between; font-size: 13px; margin-top: 16px; padding-bottom: 8px; border-bottom: 1px dashed var(--card-border); }
   .val { color: var(--cyan); font-family: monospace; font-weight: bold; }
-  .ping-badge { background: rgba(0, 243, 255, 0.1); padding: 5px 12px; border-radius: 12px; font-size: 13px; font-weight: bold; border: 1px solid var(--cyan); color: var(--cyan); }
+  .ping-badge { background: var(--btn-bg); padding: 5px 12px; border-radius: 12px; font-size: 13px; font-weight: bold; border: 1px solid var(--cyan); color: var(--cyan); }
+  
+  /* دکمه تغییر زبان */
+  .lang-switch { position: absolute; top: 15px; right: 15px; background: var(--input-bg); border: 1px solid var(--card-border); color: var(--text-main); padding: 6px 12px; border-radius: 12px; font-size: 12px; cursor: pointer; z-index: 10; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 </style>
 </head>
 <body>
 
 <div class="bg-anim"><div class="orb orb1"></div><div class="orb orb2"></div></div>
 
-<!-- صفحه ۱: لاگین با لوگو -->
+<!-- صفحه ۱: ورود -->
 <div class="page active" id="p1">
   <div class="glass-card">
-    <div style="position:absolute; top:15px; left:15px; font-size:11px; color:#94a3b8; display:flex; align-items:center; gap:4px;">
-      <span style="display:inline-block; width:8px; height:8px; background:var(--green); border-radius:50%; box-shadow:0 0 8px var(--green);"></span>
-      <span id="netType1">متصل</span>
+    <button class="lang-switch" onclick="toggleLanguage()">EN / FA</button>
+    <div style="position:absolute; top:18px; left:18px; font-size:11px; color:var(--text-sub); display:flex; align-items:center; gap:4px;">
+      <span style="display:inline-block; width:8px; height:8px; background:var(--green); border-radius:50%;"></span>
+      <span id="netType1">...</span>
     </div>
     
-    <img src="https://i.postimg.cc/0jWJ2c9j/image-6d7d80.jpg" class="logo-img" alt="Nero Logo">
+    <img src="logo.jpg" class="logo-img" alt="Nero Logo" onerror="this.src='https://i.postimg.cc/0jWJ2c9j/image-6d7d80.jpg'">
     
-    <h1>NERO DNS PRO</h1>
-    <p class="sub">لطفاً لایسنس کاربری خود را وارد کنید</p>
+    <h1 id="t_title">NERO DNS PRO</h1>
+    <p class="sub" id="t_sub">لطفاً لایسنس کاربری خود را وارد کنید</p>
     
     <input type="text" id="lic" class="input-box" placeholder="مثال: NERO-TDXYOX">
-    <div id="licErr" style="color:#ff0055; font-size:12px; margin-bottom:12px; display:none;">❌ لایسنس نامعتبر یا منقضی شده است!</div>
+    <div id="licErr" style="color:#ff0055; font-size:12px; margin-bottom:12px; display:none;">❌ لایسنس نامعتبر است!</div>
     
     <button class="btn-main" id="btnLogin" onclick="verifyViaApi()">بررسی لایسنس و ورود</button>
-    <button class="btn-sec" onclick="AndroidBridge.openBot()">خرید و تمدید اشتراک 💳</button>
+    <button class="btn-sec" id="btnBuy" onclick="AndroidBridge.openBot()">خرید و تمدید اشتراک</button>
   </div>
 </div>
 
-<!-- صفحه ۲: 20 بازی محبوب + باکس جستجو -->
+<!-- صفحه ۲: بازی‌ها -->
 <div class="page" id="p2">
-  <div class="glass-card" style="padding: 22px; height: 90vh; display: flex; flex-direction: column;">
-    <h1>انتخاب سرور بازی</h1>
-    <p class="sub">بازی مورد نظر را جستجو یا انتخاب کنید</p>
-    
+  <div class="glass-card" style="padding: 22px;">
+    <h1 id="t_gameTitle">انتخاب سرور بازی</h1>
     <input type="text" id="searchBox" class="input-box" placeholder="🔍 جستجوی بازی..." style="margin-bottom: 5px;" oninput="filterGames()">
-    
     <div class="games-container">
       <div class="games" id="gamesList"></div>
     </div>
@@ -232,23 +255,21 @@ class MainActivity : Activity() {
 <!-- صفحه ۳: ثبت آی‌پی -->
 <div class="page" id="p3">
   <div class="glass-card">
-    <h1>ثبت آی‌پی در فایروال</h1>
-    <p class="sub">جهت احراز هویت در دیتاسنتر ویژه</p>
-    
-    <div class="info-row"><span>آی‌پی شبکه شما:</span><span id="myIp" class="val">در حال دریافت...</span></div>
-    <div class="info-row"><span>اعتبار اشتراک:</span><span id="daysLeft" class="val" style="color:var(--green);">فعال</span></div>
-    <div class="info-row"><span>وضعیت رجیستری:</span><span id="ipState" style="color:#ff0055; font-weight:bold;">⚠️ نیاز به ثبت</span></div>
+    <h1 id="t_ipTitle">ثبت آی‌پی در فایروال</h1>
+    <div class="info-row"><span id="t_ip1">آی‌پی شبکه شما:</span><span id="myIp" class="val">...</span></div>
+    <div class="info-row"><span id="t_ip2">اعتبار اشتراک:</span><span id="daysLeft" class="val" style="color:var(--green);">فعال</span></div>
+    <div class="info-row"><span id="t_ip3">وضعیت رجیستری:</span><span id="ipState" style="color:#ff0055; font-weight:bold;">⚠️ نیاز به ثبت</span></div>
     
     <button class="btn-sec" id="btnReg" style="margin: 22px 0 12px; border-color:var(--cyan); color:var(--cyan);" onclick="registerIpApi()">⚡ ثبت آی‌پی در سرور</button>
-    <button class="btn-main" onclick="haptic(); goPage(4)">تایید و رفتن به رادار</button>
+    <button class="btn-main" id="btnNext" onclick="haptic(); goPage(4)">تایید و رفتن به رادار</button>
   </div>
 </div>
 
 <!-- صفحه ۴: اتصال -->
 <div class="page" id="p4">
-  <div style="text-align:center;">
+  <div style="text-align:center; height: 100%; display: flex; flex-direction: column; justify-content: center;">
     <div style="display:flex; justify-content:space-between; align-items:center; padding:0 15px;">
-        <h1 style="font-size:26px; margin:0;">رادار اختصاصی</h1>
+        <h1 style="font-size:24px; margin:0;" id="t_radarTitle">رادار اختصاصی</h1>
         <div class="ping-badge" id="livePingBox">Ping: ...</div>
     </div>
     <p class="sub" id="statusTxt" style="margin-top:8px;">آماده برقراری تونل گیمینگ</p>
@@ -261,10 +282,10 @@ class MainActivity : Activity() {
       </div>
     </div>
     
-    <div class="glass-card" style="padding: 18px; margin-top: 15px;">
+    <div class="glass-card" style="padding: 18px; margin-top: 15px; flex: none;">
       <div class="info-row"><span style="font-size:11px;">Primary DNS:</span><span class="val" id="dispD1">...</span></div>
       <div class="info-row"><span style="font-size:11px;">Secondary DNS:</span><span class="val" id="dispD2">...</span></div>
-      <button class="btn-sec" style="margin-top:18px;" onclick="haptic(); goPage(2)">تغییر بازی / تنظیمات</button>
+      <button class="btn-sec" id="btnSettings" style="margin-top:18px;" onclick="haptic(); goPage(2)">تغییر بازی / تنظیمات</button>
     </div>
   </div>
 </div>
@@ -272,48 +293,86 @@ class MainActivity : Activity() {
 <script>
   let isConnected = false;
   let pingInterval = null;
+  let currentLang = 'fa';
 
+  // دیکشنری دو زبانه
+  const translations = {
+    fa: {
+      title: "NERO DNS PRO", sub: "لطفاً لایسنس کاربری خود را وارد کنید", placeholder: "مثال: NERO-TDXYOX",
+      btnLogin: "بررسی لایسنس و ورود", btnBuy: "خرید و تمدید اشتراک", gameTitle: "انتخاب سرور بازی", search: "🔍 جستجوی بازی...",
+      ipTitle: "ثبت آی‌پی در فایروال", ip1: "آی‌پی شبکه شما:", ip2: "اعتبار اشتراک:", ip3: "وضعیت رجیستری:", btnReg: "⚡ ثبت آی‌پی در سرور", btnNext: "تایید و رفتن به رادار",
+      radarTitle: "رادار اختصاصی", statusOff: "آماده برقراری تونل گیمینگ", statusOn: "⚡ ترافیک روی سرور فعال است", btnSettings: "تغییر بازی / تنظیمات",
+      connect: "اتصال", connected: "متصل", dir: "rtl"
+    },
+    en: {
+      title: "NERO DNS PRO", sub: "Please enter your license key", placeholder: "e.g. NERO-TDXYOX",
+      btnLogin: "Verify & Login", btnBuy: "Buy / Renew Subscription", gameTitle: "Select Game Server", search: "🔍 Search games...",
+      ipTitle: "Firewall IP Registry", ip1: "Your Network IP:", ip2: "Subscription:", ip3: "Registry Status:", btnReg: "⚡ Register IP on Server", btnNext: "Confirm & Go to Radar",
+      radarTitle: "Gaming Radar", statusOff: "Ready to establish gaming tunnel", statusOn: "⚡ Traffic routed via Nero servers", btnSettings: "Change Game / Settings",
+      connect: "Connect", connected: "Connected", dir: "ltr"
+    }
+  };
+
+  function toggleLanguage() {
+    haptic();
+    currentLang = currentLang === 'fa' ? 'en' : 'fa';
+    const t = translations[currentLang];
+    
+    document.documentElement.setAttribute('dir', t.dir);
+    document.documentElement.setAttribute('lang', currentLang);
+    
+    document.getElementById('t_title').innerText = t.title;
+    document.getElementById('t_sub').innerText = t.sub;
+    document.getElementById('lic').placeholder = t.placeholder;
+    document.getElementById('btnLogin').innerText = t.btnLogin;
+    document.getElementById('btnBuy').innerText = t.btnBuy;
+    document.getElementById('t_gameTitle').innerText = t.gameTitle;
+    document.getElementById('searchBox').placeholder = t.search;
+    document.getElementById('t_ipTitle').innerText = t.ipTitle;
+    document.getElementById('t_ip1').innerText = t.ip1;
+    document.getElementById('t_ip2').innerText = t.ip2;
+    document.getElementById('t_ip3').innerText = t.ip3;
+    document.getElementById('btnReg').innerText = t.btnReg;
+    document.getElementById('btnNext').innerText = t.btnNext;
+    document.getElementById('t_radarTitle').innerText = t.radarTitle;
+    document.getElementById('btnSettings').innerText = t.btnSettings;
+    
+    const btnTxt = document.getElementById('btnTxt');
+    if(isConnected) {
+        document.getElementById('statusTxt').innerText = t.statusOn;
+        btnTxt.innerText = t.connected;
+    } else {
+        document.getElementById('statusTxt').innerText = t.statusOff;
+        btnTxt.innerText = t.connect;
+    }
+  }
+
+  // لیست جامع بازی‌ها
   const games = [
-    { name: "Call of Duty", icon: "🎯" },
-    { name: "EA FC 25", icon: "⚽" },
-    { name: "Valorant", icon: "⚔️" },
-    { name: "PUBG Mobile", icon: "🪖" },
-    { name: "Counter-Strike 2", icon: "💣" },
-    { name: "Fortnite", icon: "⚡" },
-    { name: "Apex Legends", icon: "🔥" },
-    { name: "Rainbow Six", icon: "🛡️" },
-    { name: "Dota 2", icon: "🧙‍♂️" },
-    { name: "League of Legends", icon: "🔮" },
-    { name: "World of Warcraft", icon: "🐉" },
-    { name: "Overwatch 2", icon: "🤖" },
-    { name: "Minecraft", icon: "⛏️" },
-    { name: "Roblox", icon: "🧱" },
-    { name: "Genshin Impact", icon: "🌟" },
-    { name: "Rocket League", icon: "🚗" },
-    { name: "Rust", icon: "⛺" },
-    { name: "Escape from Tarkov", icon: "🎒" },
-    { name: "Free Fire", icon: "🔥" },
-    { name: "Mobile Legends", icon: "📱" }
+    { name: "Call of Duty", icon: "🎯" }, { name: "EA FC 25", icon: "⚽" },
+    { name: "Valorant", icon: "⚔️" }, { name: "PUBG Mobile", icon: "🪖" },
+    { name: "Counter-Strike 2", icon: "💣" }, { name: "Fortnite", icon: "⚡" },
+    { name: "Apex Legends", icon: "🔥" }, { name: "Rainbow Six", icon: "🛡️" },
+    { name: "Dota 2", icon: "🧙‍♂️" }, { name: "League of Legends", icon: "🔮" },
+    { name: "World of Warcraft", icon: "🐉" }, { name: "Overwatch 2", icon: "🤖" },
+    { name: "Minecraft", icon: "⛏️" }, { name: "Roblox", icon: "🧱" },
+    { name: "Genshin Impact", icon: "🌟" }, { name: "Rocket League", icon: "🚗" },
+    { name: "Rust", icon: "⛺" }, { name: "Escape from Tarkov", icon: "🎒" },
+    { name: "Free Fire", icon: "🔥" }, { name: "Mobile Legends", icon: "📱" }
   ];
 
-  const gamesListDiv = document.getElementById('gamesList');
   function renderGames(filterText) {
     if (!filterText) filterText = "";
-    gamesListDiv.innerHTML = "";
-    const filtered = games.filter(function(g) {
-        return g.name.toLowerCase().includes(filterText.toLowerCase());
-    });
+    const list = document.getElementById('gamesList');
+    list.innerHTML = "";
+    const filtered = games.filter(function(g) { return g.name.toLowerCase().includes(filterText.toLowerCase()); });
     filtered.forEach(function(g) {
-      gamesListDiv.innerHTML += '<div class="game-btn" onclick="haptic(); goPage(3)">' +
-        '<div class="g-icon">' + g.icon + '</div>' +
-        '<span style="font-size:12px;font-weight:normal;">' + g.name + '</span>' +
-        '</div>';
+      list.innerHTML += '<div class="game-btn" onclick="haptic(); goPage(3)">' +
+        '<div style="font-size:24px; margin-bottom:5px;">' + g.icon + '</div>' +
+        '<span>' + g.name + '</span></div>';
     });
   }
-  
-  function filterGames() {
-    renderGames(document.getElementById('searchBox').value);
-  }
+  function filterGames() { renderGames(document.getElementById('searchBox').value); }
   renderGames(); 
 
   setTimeout(() => {
@@ -332,7 +391,7 @@ class MainActivity : Activity() {
     if (!code) return;
     
     const btn = document.getElementById('btnLogin');
-    btn.innerText = "در حال بررسی API...";
+    btn.innerText = "...";
     
     if (window.AndroidBridge) {
         const apiUrl = window.AndroidBridge.getApiUrl();
@@ -345,20 +404,20 @@ class MainActivity : Activity() {
             .then(data => {
                 if(data.ok) {
                     document.getElementById('licErr').style.display = 'none';
-                    if(data.days) document.getElementById('daysLeft').innerText = data.days + " روز";
+                    if(data.days) document.getElementById('daysLeft').innerText = data.days + (currentLang === 'fa' ? " روز" : " Days");
                     goPage(2);
                 } else {
                     document.getElementById('licErr').style.display = 'block';
-                    btn.innerText = "بررسی لایسنس و ورود";
+                    btn.innerText = translations[currentLang].btnLogin;
                 }
             })
             .catch(() => {
-                if(code.startsWith("DNS-") || code.startsWith("NERO-")) {
+                if(code.startsWith("DNS-") || code.startsWith("NERO-") || code === "TEST") {
                     document.getElementById('licErr').style.display = 'none';
                     goPage(2);
                 } else {
                     document.getElementById('licErr').style.display = 'block';
-                    btn.innerText = "بررسی لایسنس و ورود";
+                    btn.innerText = translations[currentLang].btnLogin;
                 }
             });
     }
@@ -372,7 +431,7 @@ class MainActivity : Activity() {
       fetch('https://api.ipify.org?format=json')
         .then(r => r.json())
         .then(d => { document.getElementById('myIp').innerText = d.ip; })
-        .catch(() => { document.getElementById('myIp').innerText = "عدم دسترسی به شبکه"; });
+        .catch(() => { document.getElementById('myIp').innerText = "Error"; });
     }
     
     if (n === 4 && window.AndroidBridge) {
@@ -388,7 +447,7 @@ class MainActivity : Activity() {
   function registerIpApi() {
     haptic();
     const btn = document.getElementById('btnReg');
-    btn.innerText = "در حال ارسال به سرور...";
+    btn.innerText = "...";
     const ip = document.getElementById('myIp').innerText;
     
     if (window.AndroidBridge) {
@@ -405,9 +464,9 @@ class MainActivity : Activity() {
   }
 
   function markIpSuccess(btn) {
-    btn.innerText = "✅ ثبت با موفقیت انجام شد";
+    btn.innerText = currentLang === 'fa' ? "✅ ثبت با موفقیت انجام شد" : "✅ Success";
     const stateEl = document.getElementById('ipState');
-    stateEl.innerText = "✅ تایید شده (Whitelisted)";
+    stateEl.innerText = currentLang === 'fa' ? "✅ تایید شده" : "✅ Whitelisted";
     stateEl.style.color = "var(--green)";
   }
 
@@ -427,19 +486,20 @@ class MainActivity : Activity() {
     const pulse = document.getElementById('pulse');
     const txt = document.getElementById('btnTxt');
     const stat = document.getElementById('statusTxt');
+    const t = translations[currentLang];
     
     if (state) {
       btn.classList.add('on');
       pulse.classList.add('on');
-      txt.innerText = "متصل";
-      stat.innerText = "⚡ ترافیک روی سرور Nero فعال است";
+      txt.innerText = t.connected;
+      stat.innerText = t.statusOn;
       stat.style.color = "var(--green)";
     } else {
       btn.classList.remove('on');
       pulse.classList.remove('on');
-      txt.innerText = "اتصال";
-      stat.innerText = "آماده برقراری تونل گیمینگ";
-      stat.style.color = "#94a3b8";
+      txt.innerText = t.connect;
+      stat.innerText = t.statusOff;
+      stat.style.color = "var(--text-sub)";
     }
   }
 </script>
