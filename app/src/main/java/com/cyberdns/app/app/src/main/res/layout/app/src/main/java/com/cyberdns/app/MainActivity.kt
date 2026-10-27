@@ -30,16 +30,15 @@ class MainActivity : Activity() {
     private val MY_DNS_1 = "202.133.91.159"
     private val MY_DNS_2 = "82.22.175.205"
     private val BOT_URL = "https://t.me/Nerodnsbot"
-    private val API_URL = "https://musicpass.ir/api.php" 
+    private val API_URL = "https://musicpass.ir/api.php" // آدرس صحیح سایت شما
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
-        // بک‌گراند وب‌ویو شفاف می‌شود تا CSS بتواند رنگ تم تاریک/روشن را اعمال کند
         webView = WebView(this).apply {
             setBackgroundColor(Color.TRANSPARENT)
             settings.javaScriptEnabled = true
-            settings.domStorageEnabled = true
+            settings.domStorageEnabled = true // روشن کردن حافظه برای ذخیره لایسنس
             settings.cacheMode = WebSettings.LOAD_NO_CACHE
             addJavascriptInterface(WebAppInterface(), "AndroidBridge")
         }
@@ -147,7 +146,6 @@ class MainActivity : Activity() {
   @import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css');
 
   :root {
-    /* Light Theme (Default) */
     --cyan: #0077b6; --purple: #7209b7; --green: #00b300; --bg: #f8fafc;
     --glass: rgba(255, 255, 255, 0.85); --text-main: #0f172a; --text-sub: #475569;
     --card-border: rgba(0, 119, 182, 0.2); --input-bg: #ffffff; --btn-bg: rgba(0, 0, 0, 0.04);
@@ -155,7 +153,6 @@ class MainActivity : Activity() {
 
   @media (prefers-color-scheme: dark) {
     :root {
-      /* Dark Theme */
       --cyan: #00f3ff; --purple: #9d00ff; --green: #00ff9d; --bg: #050711;
       --glass: rgba(12, 18, 36, 0.75); --text-main: #ffffff; --text-sub: #94a3b8;
       --card-border: rgba(0, 243, 255, 0.25); --input-bg: rgba(0, 0, 0, 0.55);
@@ -191,7 +188,6 @@ class MainActivity : Activity() {
   .btn-main:active { transform: scale(0.95); }
   .btn-sec { width: 100%; background: transparent; border: 1px solid var(--purple); color: var(--purple); border-radius: 14px; padding: 14px; font-size: 13px; font-weight: bold; cursor: pointer; }
 
-  /* گرید بهینه بازی‌ها بدون فضای مرده */
   .games-container { flex: 1; overflow-y: auto; padding-right: 5px; margin-top: 15px; }
   .games-container::-webkit-scrollbar { width: 4px; }
   .games-container::-webkit-scrollbar-thumb { background: var(--cyan); border-radius: 10px; }
@@ -211,7 +207,6 @@ class MainActivity : Activity() {
   .val { color: var(--cyan); font-family: monospace; font-weight: bold; }
   .ping-badge { background: var(--btn-bg); padding: 5px 12px; border-radius: 12px; font-size: 13px; font-weight: bold; border: 1px solid var(--cyan); color: var(--cyan); }
   
-  /* دکمه تغییر زبان */
   .lang-switch { position: absolute; top: 15px; right: 15px; background: var(--input-bg); border: 1px solid var(--card-border); color: var(--text-main); padding: 6px 12px; border-radius: 12px; font-size: 12px; cursor: pointer; z-index: 10; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 </style>
 </head>
@@ -219,7 +214,6 @@ class MainActivity : Activity() {
 
 <div class="bg-anim"><div class="orb orb1"></div><div class="orb orb2"></div></div>
 
-<!-- صفحه ۱: ورود -->
 <div class="page active" id="p1">
   <div class="glass-card">
     <button class="lang-switch" onclick="toggleLanguage()">EN / FA</button>
@@ -241,7 +235,6 @@ class MainActivity : Activity() {
   </div>
 </div>
 
-<!-- صفحه ۲: بازی‌ها -->
 <div class="page" id="p2">
   <div class="glass-card" style="padding: 22px;">
     <h1 id="t_gameTitle">انتخاب سرور بازی</h1>
@@ -252,7 +245,6 @@ class MainActivity : Activity() {
   </div>
 </div>
 
-<!-- صفحه ۳: ثبت آی‌پی -->
 <div class="page" id="p3">
   <div class="glass-card">
     <h1 id="t_ipTitle">ثبت آی‌پی در فایروال</h1>
@@ -265,7 +257,6 @@ class MainActivity : Activity() {
   </div>
 </div>
 
-<!-- صفحه ۴: اتصال -->
 <div class="page" id="p4">
   <div style="text-align:center; height: 100%; display: flex; flex-direction: column; justify-content: center;">
     <div style="display:flex; justify-content:space-between; align-items:center; padding:0 15px;">
@@ -295,7 +286,6 @@ class MainActivity : Activity() {
   let pingInterval = null;
   let currentLang = 'fa';
 
-  // دیکشنری دو زبانه
   const translations = {
     fa: {
       title: "NERO DNS PRO", sub: "لطفاً لایسنس کاربری خود را وارد کنید", placeholder: "مثال: NERO-TDXYOX",
@@ -347,7 +337,6 @@ class MainActivity : Activity() {
     }
   }
 
-  // لیست جامع بازی‌ها
   const games = [
     { name: "Call of Duty", icon: "🎯" }, { name: "EA FC 25", icon: "⚽" },
     { name: "Valorant", icon: "⚔️" }, { name: "PUBG Mobile", icon: "🪖" },
@@ -374,6 +363,15 @@ class MainActivity : Activity() {
   }
   function filterGames() { renderGames(document.getElementById('searchBox').value); }
   renderGames(); 
+
+  // بررسی ذخیره بودن لایسنس هنگام باز شدن برنامه
+  window.onload = function() {
+      const savedLic = localStorage.getItem('nero_license');
+      if (savedLic) {
+          document.getElementById('lic').value = savedLic;
+          verifyViaApi();
+      }
+  };
 
   setTimeout(() => {
     if (window.AndroidBridge) {
@@ -403,19 +401,23 @@ class MainActivity : Activity() {
             .then(res => res.json())
             .then(data => {
                 if(data.ok) {
+                    localStorage.setItem('nero_license', code);
                     document.getElementById('licErr').style.display = 'none';
                     if(data.days) document.getElementById('daysLeft').innerText = data.days + (currentLang === 'fa' ? " روز" : " Days");
                     goPage(2);
                 } else {
+                    localStorage.removeItem('nero_license');
                     document.getElementById('licErr').style.display = 'block';
                     btn.innerText = translations[currentLang].btnLogin;
                 }
             })
             .catch(() => {
                 if(code.startsWith("DNS-") || code.startsWith("NERO-") || code === "TEST") {
+                    localStorage.setItem('nero_license', code);
                     document.getElementById('licErr').style.display = 'none';
                     goPage(2);
                 } else {
+                    localStorage.removeItem('nero_license');
                     document.getElementById('licErr').style.display = 'block';
                     btn.innerText = translations[currentLang].btnLogin;
                 }
