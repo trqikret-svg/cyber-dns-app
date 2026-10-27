@@ -30,7 +30,7 @@ class MainActivity : Activity() {
     private val MY_DNS_1 = "202.133.91.159"
     private val MY_DNS_2 = "82.22.175.205"
     private val BOT_URL = "https://t.me/Nerodnsbot"
-    private val API_URL = "https://musicpass.ir/api.php" // آدرس سایت شما
+    private val API_URL = "https://musicpass.ir/api.php"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +38,7 @@ class MainActivity : Activity() {
         webView = WebView(this).apply {
             setBackgroundColor(Color.TRANSPARENT)
             settings.javaScriptEnabled = true
-            settings.domStorageEnabled = true // روشن کردن حافظه برای ذخیره لایسنس و تم
+            settings.domStorageEnabled = true
             settings.cacheMode = WebSettings.LOAD_NO_CACHE
             addJavascriptInterface(WebAppInterface(), "AndroidBridge")
         }
@@ -146,14 +146,12 @@ class MainActivity : Activity() {
 <style>
   @import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css');
 
-  /* تم روشن */
   :root {
     --cyan: #0077b6; --purple: #7209b7; --green: #00b300; --bg: #f8fafc;
     --glass: rgba(255, 255, 255, 0.85); --text-main: #0f172a; --text-sub: #475569;
     --card-border: rgba(0, 119, 182, 0.2); --input-bg: #ffffff; --btn-bg: rgba(0, 0, 0, 0.04);
   }
 
-  /* تم تاریک */
   [data-theme="dark"] {
     --cyan: #00f3ff; --purple: #9d00ff; --green: #00ff9d; --bg: #050711;
     --glass: rgba(12, 18, 36, 0.75); --text-main: #ffffff; --text-sub: #94a3b8;
@@ -207,7 +205,6 @@ class MainActivity : Activity() {
   .val { color: var(--cyan); font-family: monospace; font-weight: bold; }
   .ping-badge { background: var(--btn-bg); padding: 5px 12px; border-radius: 12px; font-size: 13px; font-weight: bold; border: 1px solid var(--cyan); color: var(--cyan); }
   
-  /* دکمه‌های کنترل بالا (زبان، تم و خروج) */
   .top-controls { position: fixed; top: 15px; right: 15px; display: flex; gap: 8px; z-index: 100; }
   .action-btn { background: var(--input-bg); border: 1px solid var(--card-border); color: var(--text-main); padding: 6px 12px; border-radius: 12px; font-size: 12px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: 0.2s; }
   .action-btn:active { transform: scale(0.95); }
@@ -217,14 +214,12 @@ class MainActivity : Activity() {
 
 <div class="bg-anim"><div class="orb orb1"></div><div class="orb orb2"></div></div>
 
-<!-- دکمه‌های شناور بالا -->
 <div class="top-controls">
     <button class="action-btn" onclick="toggleTheme()" id="themeBtn">☀️</button>
     <button class="action-btn" onclick="toggleLanguage()">EN / FA</button>
     <button class="action-btn" onclick="logoutApp()" id="logoutBtn" style="display:none; color:#ff0055; border-color:#ff0055;">خروج</button>
 </div>
 
-<!-- صفحه ۱: ورود -->
 <div class="page active" id="p1">
   <div class="glass-card">
     <div style="position:absolute; top:18px; left:18px; font-size:11px; color:var(--text-sub); display:flex; align-items:center; gap:4px;">
@@ -245,7 +240,6 @@ class MainActivity : Activity() {
   </div>
 </div>
 
-<!-- صفحه ۲: بازی‌ها -->
 <div class="page" id="p2">
   <div class="glass-card" style="padding: 22px; height: 90vh;">
     <h1 id="t_gameTitle">انتخاب سرور بازی</h1>
@@ -256,7 +250,6 @@ class MainActivity : Activity() {
   </div>
 </div>
 
-<!-- صفحه ۳: ثبت آی‌پی -->
 <div class="page" id="p3">
   <div class="glass-card">
     <h1 id="t_ipTitle">ثبت آی‌پی در فایروال</h1>
@@ -269,7 +262,6 @@ class MainActivity : Activity() {
   </div>
 </div>
 
-<!-- صفحه ۴: اتصال -->
 <div class="page" id="p4">
   <div style="text-align:center; height: 100%; display: flex; flex-direction: column; justify-content: center;">
     <div style="display:flex; justify-content:space-between; align-items:center; padding:0 15px;">
@@ -301,7 +293,6 @@ class MainActivity : Activity() {
 
   function haptic() { if (window.AndroidBridge) window.AndroidBridge.triggerHaptic(40); }
 
-  // سیستم تغییر تم
   function toggleTheme() {
     haptic();
     const html = document.documentElement;
@@ -312,7 +303,6 @@ class MainActivity : Activity() {
     document.getElementById('themeBtn').innerText = newTheme === 'dark' ? '☀️' : '🌙';
   }
 
-  // سیستم دو زبانه و ترجمه‌ها
   const translations = {
     fa: {
       title: "NERO DNS PRO", sub: "نسخه اندروید - لطفا لایسنس را وارد کنید", placeholder: "مثال: NERO-TDXYOX",
@@ -365,20 +355,17 @@ class MainActivity : Activity() {
     }
   }
 
-  // سیستم خروج از حساب (Logout)
   function logoutApp() {
       haptic();
-      localStorage.removeItem('nero_license'); // پاک کردن لایسنس از حافظه
-      document.getElementById('lic').value = ''; // خالی کردن فیلد متنی
-      document.getElementById('licErr').style.display = 'none'; // مخفی کردن ارورها
-      document.getElementById('logoutBtn').style.display = 'none'; // مخفی کردن دکمه خروج
+      localStorage.removeItem('nero_license');
+      document.getElementById('lic').value = '';
+      document.getElementById('licErr').style.display = 'none';
+      document.getElementById('logoutBtn').style.display = 'none';
       
-      // اگر VPN وصل است، قطع شود
       if (isConnected && window.AndroidBridge) {
           window.AndroidBridge.stopVpn();
       }
-      
-      goPage(1); // بازگشت به صفحه اول
+      goPage(1);
   }
 
   const games = [
@@ -393,16 +380,16 @@ class MainActivity : Activity() {
     { name: "Rust", icon: "⛺" }, { name: "Genshin Impact", icon: "🌟" }
   ];
 
-  function renderGames(filterText = "") {
+  function renderGames(filterText) {
+    if (!filterText) filterText = "";
     const list = document.getElementById('gamesList');
     list.innerHTML = "";
-    const filtered = games.filter(g => g.name.toLowerCase().includes(filterText.toLowerCase()));
-    filtered.forEach(g => {
-      list.innerHTML += `<div class="game-btn" onclick="haptic(); goPage(3)"><div style="font-size:24px; margin-bottom:5px;">${g.icon}</div><span>${g.name}</span></div>`;
+    const filtered = games.filter(function(g) { return g.name.toLowerCase().includes(filterText.toLowerCase()); });
+    filtered.forEach(function(g) {
+      list.innerHTML += '<div class="game-btn" onclick="haptic(); goPage(3)"><div style="font-size:24px; margin-bottom:5px;">' + g.icon + '</div><span>' + g.name + '</span></div>';
     });
   }
-  
-  // اجرای تنظیمات در هنگام لود برنامه
+
   document.addEventListener("DOMContentLoaded", () => {
       const savedTheme = localStorage.getItem('nero_theme') || 'dark';
       document.documentElement.setAttribute('data-theme', savedTheme);
@@ -445,7 +432,7 @@ class MainActivity : Activity() {
                 if(data.ok) {
                     localStorage.setItem('nero_license', code);
                     document.getElementById('licErr').style.display = 'none';
-                    document.getElementById('logoutBtn').style.display = 'block'; // نمایش دکمه خروج
+                    document.getElementById('logoutBtn').style.display = 'block';
                     if(data.days) document.getElementById('daysLeft').innerText = data.days + (currentLang === 'fa' ? " روز" : " Days");
                     goPage(2);
                 } else {
@@ -458,7 +445,7 @@ class MainActivity : Activity() {
                 if(code.startsWith("DNS-") || code.startsWith("NERO-") || code === "TEST") {
                     localStorage.setItem('nero_license', code);
                     document.getElementById('licErr').style.display = 'none';
-                    document.getElementById('logoutBtn').style.display = 'block'; // نمایش دکمه خروج
+                    document.getElementById('logoutBtn').style.display = 'block';
                     goPage(2);
                 } else {
                     localStorage.removeItem('nero_license');
@@ -509,7 +496,6 @@ class MainActivity : Activity() {
     }
   }
 
-  // این تابع توسط کدهای کاتلین پس از تایید VPN اجرا می‌شود
   function setConnectionState(state) {
     isConnected = state;
     const btn = document.getElementById('btnPwr');
